@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Dashboard Admin Mobile</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      height: 100dvh;
+      background: #f3f4f8;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flash-top {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .flash {
+      padding: 11px 13px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .flash.hide {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .flash-danger {
+      background: #ffe4e6;
+      color: #b42318;
+      border: 1px solid #fecdd3;
+    }
+
+    .flash-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .flash-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .header {
+      background: linear-gradient(180deg, #37445d 0%, #2f3b54 100%);
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      padding: 14px 12px 12px;
+      height: 182px;
+      color: #fff;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .logout {
+      color: #ffd452;
+      font-size: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .welcome-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .welcome-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .user-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f2f2f2;
+      color: #2f3b54;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+    }
+
+    .welcome-text {
+      min-width: 0;
+      line-height: 1.15;
+    }
+
+    .welcome-text span {
+      display: block;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+    }
+
+    .welcome-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 165px;
+    }
+
+    .welcome-right {
+      text-align: right;
+      flex-shrink: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 7px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      height: 36px;
+      border: none;
+      outline: none;
+      border-radius: 5px;
+      background: #f4f4f4;
+      color: #555;
+      font-size: 12px;
+      padding: 0 38px 0 12px;
+    }
+
+    .search-box input::placeholder {
+      color: #9c9c9c;
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 17px;
+      color: #5d6bff;
+    }
+
+    .content {
+      height: calc(100dvh - 182px - 64px);
+      padding: 14px 12px 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .content::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #252525;
+      margin-bottom: 10px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .stat-card {
+      background: #ececf0;
+      border-radius: 8px;
+      padding: 10px 8px;
+      min-height: 84px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .stat-icon {
+      font-size: 20px;
+      color: #6e78ff;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+
+    .stat-label {
+      font-size: 8.5px;
+      color: #666;
+      line-height: 1.3;
+    }
+
+    .stat-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1f1f1f;
+      line-height: 1.2;
+    }
+
+    .stat-sub {
+      font-size: 8.5px;
+      color: #7f7f7f;
+      line-height: 1.3;
+    }
+
+    .feedback-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .show-all {
+      text-decoration: none;
+      font-size: 9.5px;
+      color: #7d7d7d;
+      font-weight: 500;
+    }
+
+    .filter-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .filter-text {
+      font-size: 9.5px;
+      color: #6b7280;
+    }
+
+    .btn-reset {
+      border: none;
+      background: transparent;
+      color: #5d6bff;
+      font-size: 9.5px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .feedback-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .feedback-card {
+      background: #ececf0;
+      border-radius: 6px;
+      padding: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      min-height: 56px;
+    }
+
+    .feedback-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .feedback-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .feedback-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .feedback-name {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #1f1f1f;
+    }
+
+    .feedback-time {
+      font-size: 7.5px;
+      color: #8c8c8c;
+      flex-shrink: 0;
+    }
+
+    .feedback-category {
+      font-size: 8.5px;
+      color: #5d6bff;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .feedback-text {
+      font-size: 8.5px;
+      color: #535353;
+      line-height: 1.35;
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+    }
+
+    .feedback-action {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      font-size: 8px;
+      color: #7f7f7f;
+      flex-wrap: wrap;
+    }
+
+    .feedback-reply-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 54px;
+      height: 23px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #2f3b54;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 8.5px;
+      font-weight: 600;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .feedback-reply-link:hover {
+      opacity: 0.92;
+    }
+
+    .empty-card {
+      background: #ececf0;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 9.5px;
+      color: #6a6a6a;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 64px;
+      background: #2f3b54;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      overflow: hidden;
+      z-index: 1300;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.82);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .nav-item i {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      color: #ffffff;
+    }
+
+    .nav-button {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .laporan-menu {
+      position: absolute;
+      left: 50%;
+      bottom: 74px;
+      transform: translateX(-50%);
+      width: 220px;
+      background: #f3f4f8;
+      border-radius: 14px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+      padding: 8px;
+      z-index: 1400;
+    }
+
+    .laporan-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #2f3b54;
+      background: #ececf0;
+      border-radius: 10px;
+      padding: 12px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .laporan-menu-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .laporan-menu-item i {
+      font-size: 18px;
+      color: #5d6bff;
+    }
+
+    .laporan-overlay {
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      z-index: 1350;
+    }
+
+    @media (min-width: 391px) {
+      .app {
+        max-height: 760px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-top" id="flashWrap">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <header class="header">
+      <div class="topbar">
+        <a href="{{ url_for('logout') }}" class="logout">logout</a>
+      </div>
+
+      <div class="welcome-row">
+        <div class="welcome-left">
+          <div class="user-logo">
+            {{ (name or 'A')[0]|upper }}
+          </div>
+          <div class="welcome-text">
+            <span>Admin</span>
+            <strong>{{ name or 'Admin' }}</strong>
+          </div>
+        </div>
+
+        <div class="welcome-right">
+          <div>{{ current_day_name }}, {{ current_day }} {{ current_month_name }} {{ current_year }}</div>
+          <div>Jam {{ current_time_only[:5] }}</div>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Cari sesuatu"
+        />
+        <i class="ri-search-line"></i>
+      </div>
+    </header>
+
+    <main class="content">
+      <section id="sectionStats">
+        <h3 class="section-title">Ringkasan</h3>
+        <div class="stats-grid">
+          <div
+            class="stat-card searchable-item"
+            data-search="jumlah warga total warga penduduk"
+          >
+            <i class="ri-group-line stat-icon"></i>
+            <div class="stat-label">JUMLAH WARGA</div>
+            <div class="stat-value">{{ dashboard_stats.warga.total }}</div>
+            <div class="stat-sub">warga</div>
+          </div>
+
+          <div
+            class="stat-card searchable-item"
+            data-search="total feedback semua feedback kritik saran aduan"
+          >
+            <i class="ri-chat-1-line stat-icon"></i>
+            <div class="stat-label">TOTAL FEEDBACK</div>
+            <div class="stat-value">{{ dashboard_stats.feedback.total }}</div>
+            <div class="stat-sub">feedback</div>
+          </div>
+
+          <div
+            class="stat-card searchable-item"
+            data-search="saldo kas total saldo keuangan"
+          >
+            <i class="ri-wallet-3-line stat-icon"></i>
+            <div class="stat-label">SALDO</div>
+            <div class="stat-value">Rp{{ dashboard_stats.keuangan.saldo_fmt }}</div>
+            <div class="stat-sub">kas</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sectionFeedback">
+        <div class="feedback-head">
+          <h3 class="section-title" style="margin-bottom:0;">Feedback Terkini</h3>
+          <a href="{{ url_for('feedback_admin') }}" class="show-all">Show All</a>
+        </div>
+
+        <div class="filter-info">
+          <div class="filter-text" id="filterText">Menampilkan semua data</div>
+          <button type="button" class="btn-reset hidden" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="feedback-list" id="feedbackList">
+          {% if latest_feedback %}
+            {% for item in latest_feedback %}
+              <div
+                class="feedback-card searchable-item"
+                data-search="{{ ((item.display_name or 'Anonim') ~ ' ' ~ (item.kategori or '-') ~ ' ' ~ (item.isi or '') ~ ' ' ~ (item.status or '-') ~ ' ' ~ (item.created_at_fmt or '-'))|lower }}"
+              >
+                <div class="feedback-avatar">
+                  {{ item.initial or 'A' }}
+                </div>
+
+                <div class="feedback-body">
+                  <div class="feedback-meta">
+                    <div class="feedback-name">{{ item.display_name or 'Anonim' }}</div>
+                    <div class="feedback-time">{{ item.created_at_fmt or '-' }}</div>
+                  </div>
+
+                  <div class="feedback-category">
+                    {{ item.kategori or '-' }}
+                  </div>
+
+                  <div class="feedback-text">
+                    {{ item.isi }}
+                  </div>
+
+                  <div class="feedback-action">
+                    <a
+                      href="{{ url_for('feedback_admin') }}?focus={{ item.id_feedback }}"
+                      class="feedback-reply-link"
+                    >
+                      Balas
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-card" id="emptyInitial">
+              Belum ada feedback masuk.
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="empty-card hidden" id="emptySearch">
+          Tidak ada data yang cocok dengan pencarian.
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="{{ url_for('dashboard_admin') }}" class="nav-item active">
+        <i class="ri-home-5-line"></i>
+        <span>Beranda</span>
+      </a>
+
+      <button type="button" class="nav-item nav-button" id="laporanBtn">
+        <i class="ri-file-list-3-line"></i>
+        <span>Laporan</span>
+      </button>
+
+      <a href="{{ url_for('warga_admin') }}" class="nav-item">
+        <i class="ri-user-3-line"></i>
+        <span>Warga</span>
+      </a>
+
+      <a href="{{ url_for('feedback_admin') }}" class="nav-item">
+        <i class="ri-chat-1-line"></i>
+        <span>Feedback</span>
+      </a>
+    </nav>
+
+    <div class="laporan-menu hidden" id="laporanMenu">
+      <a href="{{ url_for('kegiatan_admin') }}" class="laporan-menu-item">
+        <i class="ri-calendar-check-line"></i>
+        <span>Laporan Kegiatan</span>
+      </a>
+      <a href="{{ url_for('keuangan_admin') }}" class="laporan-menu-item">
+        <i class="ri-wallet-3-line"></i>
+        <span>Laporan Keuangan</span>
+      </a>
+    </div>
+
+    <div class="laporan-overlay hidden" id="laporanOverlay"></div>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      const flashes = document.querySelectorAll(".flash");
+      if (flashes.length > 0) {
+        setTimeout(() => {
+          flashes.forEach((flash) => flash.classList.add("hide"));
+        }, 5000);
+
+        setTimeout(() => {
+          const wrap = document.getElementById("flashWrap");
+          if (wrap) wrap.remove();
+        }, 5400);
+      }
+
+      const searchInput = document.getElementById("searchInput");
+      const filterText = document.getElementById("filterText");
+      const resetBtn = document.getElementById("resetBtn");
+      const emptySearch = document.getElementById("emptySearch");
+      const emptyInitial = document.getElementById("emptyInitial");
+      const searchableItems = document.querySelectorAll(".searchable-item");
+
+      function applySearch() {
+        const keyword = (searchInput.value || "").trim().toLowerCase();
+        let shown = 0;
+
+        searchableItems.forEach((item) => {
+          const haystack = (item.dataset.search || "").toLowerCase();
+          const match = keyword === "" || haystack.includes(keyword);
+
+          if (match) {
+            item.classList.remove("hidden");
+            shown += 1;
+          } else {
+            item.classList.add("hidden");
+          }
+        });
+
+        if (keyword) {
+          filterText.textContent = `Pencarian: "${keyword}" (${shown} hasil)`;
+          resetBtn.classList.remove("hidden");
+        } else {
+          filterText.textContent = "Menampilkan semua data";
+          resetBtn.classList.add("hidden");
+        }
+
+        if (emptyInitial) {
+          emptyInitial.classList.add("hidden");
+        }
+
+        if (keyword && shown === 0) {
+          emptySearch.classList.remove("hidden");
+        } else {
+          emptySearch.classList.add("hidden");
+        }
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener("input", applySearch);
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          applySearch();
+          searchInput.focus();
+        });
+      }
+
+      const laporanBtn = document.getElementById("laporanBtn");
+      const laporanMenu = document.getElementById("laporanMenu");
+      const laporanOverlay = document.getElementById("laporanOverlay");
+
+      function openLaporanMenu() {
+        laporanMenu.classList.remove("hidden");
+        laporanOverlay.classList.remove("hidden");
+      }
+
+      function closeLaporanMenu() {
+        laporanMenu.classList.add("hidden");
+        laporanOverlay.classList.add("hidden");
+      }
+
+      if (laporanBtn && laporanMenu && laporanOverlay) {
+        laporanBtn.addEventListener("click", function () {
+          const isHidden = laporanMenu.classList.contains("hidden");
+          if (isHidden) {
+            openLaporanMenu();
+          } else {
+            closeLaporanMenu();
+          }
+        });
+
+        laporanOverlay.addEventListener("click", closeLaporanMenu);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dashboard Warga</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      height: 100dvh;
+      background: #f4f5f9;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flash-top {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .flash {
+      padding: 11px 13px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .flash.hide {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .flash-danger {
+      background: #ffe4e6;
+      color: #b42318;
+      border: 1px solid #fecdd3;
+    }
+
+    .flash-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .flash-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .header {
+      background: linear-gradient(180deg, #37445d 0%, #2f3b54 100%);
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      padding: 14px 12px 14px;
+      min-height: 232px;
+      color: #fff;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .logout {
+      color: #ffd452;
+      font-size: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .welcome-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .welcome-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .user-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #f2f2f2;
+      color: #2f3b54;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+    }
+
+    .welcome-text {
+      min-width: 0;
+      line-height: 1.15;
+    }
+
+    .welcome-text span {
+      display: block;
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 2px;
+    }
+
+    .welcome-text strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+    }
+
+    .welcome-right {
+      text-align: right;
+      flex-shrink: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 7px;
+      line-height: 1.4;
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .search-box input {
+      width: 100%;
+      height: 36px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: #f4f4f4;
+      color: #555;
+      font-size: 11px;
+      padding: 0 38px 0 12px;
+    }
+
+    .search-box input::placeholder {
+      color: #9c9c9c;
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #5d6bff;
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 10px 8px;
+      backdrop-filter: blur(4px);
+    }
+
+    .stat-label {
+      font-size: 8px;
+      color: rgba(255,255,255,0.78);
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+
+    .stat-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .content {
+      height: calc(100dvh - 232px - 64px);
+      padding: 14px 12px 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .content::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #252525;
+      margin-bottom: 10px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .show-all {
+      text-decoration: none;
+      font-size: 9px;
+      color: #7d7d7d;
+      font-weight: 500;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .menu-card {
+      background: #ececf0;
+      border-radius: 10px;
+      height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      text-align: center;
+      color: #555;
+      font-size: 9px;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .menu-card i {
+      font-size: 22px;
+      color: #6e78ff;
+      line-height: 1;
+    }
+
+    .highlight-card {
+      background: linear-gradient(135deg, #eef2ff 0%, #e5e9ff 100%);
+      border: 1px solid #dfe5ff;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .highlight-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #2f3b54;
+      margin-bottom: 4px;
+    }
+
+    .highlight-text {
+      font-size: 9px;
+      color: #626b81;
+      line-height: 1.5;
+    }
+
+    .finance-card {
+      background: #ececf0;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .finance-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .finance-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #1f1f1f;
+    }
+
+    .finance-badge {
+      font-size: 8px;
+      color: #2f3b54;
+      background: #dce2ff;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .finance-balance {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2f3b54;
+      margin-bottom: 10px;
+      line-height: 1.1;
+    }
+
+    .finance-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .finance-item {
+      background: #f7f7fa;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .finance-item-label {
+      font-size: 8px;
+      color: #7a7a7a;
+      margin-bottom: 4px;
+    }
+
+    .finance-item-value {
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .text-success {
+      color: #166534;
+    }
+
+    .text-danger {
+      color: #b42318;
+    }
+
+    .finance-link {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      font-size: 10px;
+      font-weight: 600;
+      color: #fff;
+      background: #2f3b54;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .info-card {
+      background: #ececf0;
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      min-height: 58px;
+    }
+
+    .info-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #111;
+      color: #fff;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .info-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .info-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .info-name {
+      font-size: 10px;
+      font-weight: 700;
+      color: #1f1f1f;
+    }
+
+    .info-time {
+      font-size: 7px;
+      color: #8c8c8c;
+      flex-shrink: 0;
+    }
+
+    .info-text {
+      font-size: 8px;
+      color: #535353;
+      line-height: 1.35;
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+    }
+
+    .info-action {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 8px;
+      color: #7f7f7f;
+    }
+
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .activity-card {
+      background: #ececf0;
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .activity-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #1f1f1f;
+      line-height: 1.35;
+    }
+
+    .activity-meta {
+      font-size: 8px;
+      color: #666;
+      line-height: 1.45;
+    }
+
+    .empty-card {
+      background: #ececf0;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 9px;
+      color: #6a6a6a;
+      text-align: center;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 64px;
+      background: #2f3b54;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      overflow: hidden;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.82);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .nav-item i {
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      color: #ffffff;
+    }
+
+    @media (min-width: 391px) {
+      .app {
+        max-height: 760px;
+      }
+    }
+  </style>
+</head>
+<body data-user-name="{{ name or 'User' }}">
+  {% set saldo_fmt = summary_keuangan.saldo_fmt if summary_keuangan is defined and summary_keuangan.saldo_fmt is defined else '0' %}
+  {% set total_masuk_fmt = summary_keuangan.total_masuk_fmt if summary_keuangan is defined and summary_keuangan.total_masuk_fmt is defined else '0' %}
+  {% set total_keluar_fmt = summary_keuangan.total_keluar_fmt if summary_keuangan is defined and summary_keuangan.total_keluar_fmt is defined else '0' %}
+  {% set total_data_keuangan = summary_keuangan.total_data if summary_keuangan is defined and summary_keuangan.total_data is defined else 0 %}
+
+  <div class="app">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-top" id="flashWrap">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <header class="header">
+      <div class="topbar">
+        <a href="{{ url_for('logout') }}" class="logout">logout</a>
+      </div>
+
+      <div class="welcome-row">
+        <div class="welcome-left">
+          <div class="user-logo" id="userLogo">
+            {{ (name or 'U')[0]|upper }}
+          </div>
+          <div class="welcome-text">
+            <span>Warga</span>
+            <strong id="welcomeName">{{ (name or 'User').split(' ')[0] }}</strong>
+          </div>
+        </div>
+
+        <div class="welcome-right">
+          <div>{{ current_day_name }}, {{ current_day }} {{ current_month_name }} {{ current_year }}</div>
+          <div>Jam {{ current_time_only[:5] }}</div>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <input type="text" placeholder="Cari sesuatu" />
+        <i class="ri-search-line"></i>
+      </div>
+
+      <div class="quick-stats">
+        <div class="stat-card">
+          <div class="stat-label">Feedback Saya</div>
+          <div class="stat-value">{{ total_feedback or 0 }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Kegiatan Baru</div>
+          <div class="stat-value">{{ kegiatan_terbaru|length if kegiatan_terbaru else 0 }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Data Kas</div>
+          <div class="stat-value">{{ total_data_keuangan }}</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section>
+        <h3 class="section-title">Menu</h3>
+        <div class="menu-grid">
+          <a href="{{ url_for('laporan_kegiatan_warga') }}" class="menu-card">
+            <i class="ri-calendar-event-line"></i>
+            <span>Kegiatan</span>
+          </a>
+          <a href="{{ url_for('laporan_keuangan_warga') }}" class="menu-card">
+            <i class="ri-wallet-3-line"></i>
+            <span>Keuangan</span>
+          </a>
+          <a href="{{ url_for('feedback_warga') }}" class="menu-card">
+            <i class="ri-chat-1-line"></i>
+            <span>Feedback</span>
+          </a>
+        </div>
+      </section>
+
+      <section>
+        <div class="highlight-card">
+          <div class="highlight-title">Ringkasan Hari Ini</div>
+          <div class="highlight-text">
+            Pantau feedback terbaru, cek agenda kegiatan warga, dan lihat ringkasan kas RT dari halaman utama ini.
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h3 class="section-title" style="margin-bottom:0;">Ringkasan Keuangan</h3>
+          <a href="{{ url_for('laporan_keuangan_warga') }}" class="show-all">Show all</a>
+        </div>
+
+        <div class="finance-card">
+          <div class="finance-top">
+            <div class="finance-title">Saldo Kas RT</div>
+            <div class="finance-badge">Keuangan</div>
+          </div>
+
+          <div class="finance-balance">Rp {{ saldo_fmt }}</div>
+
+          <div class="finance-grid">
+            <div class="finance-item">
+              <div class="finance-item-label">Total Masuk</div>
+              <div class="finance-item-value text-success">Rp {{ total_masuk_fmt }}</div>
+            </div>
+            <div class="finance-item">
+              <div class="finance-item-label">Total Keluar</div>
+              <div class="finance-item-value text-danger">Rp {{ total_keluar_fmt }}</div>
+            </div>
+          </div>
+
+          <a href="{{ url_for('laporan_keuangan_warga') }}" class="finance-link">
+            Lihat Laporan Keuangan Lengkap
+          </a>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h3 class="section-title" style="margin-bottom:0;">Info Terkini</h3>
+          <a href="{{ url_for('feedback_warga') }}" class="show-all">Show all</a>
+        </div>
+
+        <div class="info-list">
+          {% if feedback_user %}
+            {% for item in feedback_user[:3] %}
+              {% set display_name = 'Admin' if item.balasan_admin else ('Anonim' if item.is_anonymous else (name or 'User')) %}
+              <div class="info-card">
+                <div class="info-avatar">{{ display_name[0]|upper }}</div>
+                <div class="info-body">
+                  <div class="info-meta">
+                    <div class="info-name">{{ display_name }}</div>
+                    <div class="info-time">{{ item.created_at_fmt or '-' }}</div>
+                  </div>
+                  <div class="info-text">
+                    {% if item.balasan_admin %}
+                      {{ item.balasan_admin }}
+                    {% else %}
+                      {{ item.isi }}
+                    {% endif %}
+                  </div>
+                  <div class="info-action">
+                    <i class="ri-information-line"></i>
+                    <span>Status: {{ item.status|capitalize }}</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-card">
+              Belum ada informasi terbaru.
+            </div>
+          {% endif %}
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h3 class="section-title" style="margin-bottom:0;">Kegiatan Terbaru</h3>
+          <a href="{{ url_for('laporan_kegiatan_warga') }}" class="show-all">Show all</a>
+        </div>
+
+        <div class="activity-list">
+          {% if kegiatan_terbaru %}
+            {% for item in kegiatan_terbaru %}
+              <div class="activity-card">
+                <div class="activity-title">{{ item.judul_kegiatan or '-' }}</div>
+                <div class="activity-meta">
+                  {{ item.tanggal_kegiatan or '-' }}
+                  {% if item.waktu_kegiatan %} • {{ item.waktu_kegiatan }}{% endif %}
+                </div>
+                <div class="activity-meta">
+                  {{ item.lokasi or '-' }} • {{ item.status|capitalize }}
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-card">
+              Belum ada kegiatan terbaru.
+            </div>
+          {% endif %}
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="{{ url_for('dashboard_warga') }}" class="nav-item active">
+        <i class="ri-home-5-line"></i>
+        <span>Beranda</span>
+      </a>
+      <a href="{{ url_for('laporan_kegiatan_warga') }}" class="nav-item">
+        <i class="ri-calendar-event-line"></i>
+        <span>Kegiatan</span>
+      </a>
+      <a href="{{ url_for('laporan_keuangan_warga') }}" class="nav-item">
+        <i class="ri-wallet-3-line"></i>
+        <span>Keuangan</span>
+      </a>
+      <a href="{{ url_for('feedback_warga') }}" class="nav-item">
+        <i class="ri-chat-1-line"></i>
+        <span>Feedback</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    const fullName = document.body.dataset.userName || "User";
+    const firstName = fullName.trim().split(/\s+/)[0] || "User";
+    const initial = firstName.charAt(0).toUpperCase();
+
+    const userLogo = document.getElementById("userLogo");
+    const welcomeName = document.getElementById("welcomeName");
+
+    if (userLogo) userLogo.textContent = initial;
+    if (welcomeName) welcomeName.textContent = firstName;
+
+    window.addEventListener("DOMContentLoaded", function () {
+      const flashes = document.querySelectorAll(".flash");
+      if (flashes.length > 0) {
+        setTimeout(() => {
+          flashes.forEach((flash) => flash.classList.add("hide"));
+        }, 4500);
+
+        setTimeout(() => {
+          const wrap = document.getElementById("flashWrap");
+          if (wrap) wrap.remove();
+        }, 5000);
+      }
+    });
+  </script>
+</body>
+</html>

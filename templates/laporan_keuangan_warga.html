@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Laporan Keuangan Warga</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      height: 100dvh;
+      background: #f4f5f9;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flash-top {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .flash {
+      padding: 11px 13px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .flash.hide {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .flash-danger {
+      background: #ffe4e6;
+      color: #b42318;
+      border: 1px solid #fecdd3;
+    }
+
+    .flash-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .flash-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .header {
+      background: linear-gradient(180deg, #37445d 0%, #2f3b54 100%);
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      padding: 14px 12px 14px;
+      min-height: 214px;
+      color: #fff;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .back-link {
+      color: rgba(255,255,255,0.9);
+      font-size: 15px;
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .logout {
+      color: #ffd452;
+      font-size: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .title-wrap {
+      margin-bottom: 14px;
+    }
+
+    .page-label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.82);
+      margin-bottom: 4px;
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .page-desc {
+      font-size: 9px;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.45;
+      max-width: 310px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .summary-main {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .summary-main-label {
+      font-size: 9px;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 5px;
+    }
+
+    .summary-main-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .summary-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .summary-card-label {
+      font-size: 8px;
+      color: rgba(255,255,255,0.76);
+      margin-bottom: 4px;
+    }
+
+    .summary-card-value {
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .summary-green {
+      color: #c8ffd9;
+    }
+
+    .summary-red {
+      color: #ffd5d5;
+    }
+
+    .content {
+      height: calc(100dvh - 214px - 64px);
+      padding: 14px 12px 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .content::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #252525;
+    }
+
+    .section-sub {
+      font-size: 9px;
+      color: #7a7a7a;
+      font-weight: 500;
+    }
+
+    .hint-card {
+      background: linear-gradient(135deg, #eef2ff 0%, #e5e9ff 100%);
+      border: 1px solid #dfe5ff;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .hint-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #2f3b54;
+      margin-bottom: 4px;
+    }
+
+    .hint-text {
+      font-size: 9px;
+      color: #626b81;
+      line-height: 1.5;
+    }
+
+    .transaction-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-bottom: 10px;
+    }
+
+    .transaction-card {
+      background: #ececf0;
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+
+    .transaction-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .icon-masuk {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .icon-keluar {
+      background: #fee2e2;
+      color: #b42318;
+    }
+
+    .transaction-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .transaction-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+
+    .transaction-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #1f1f1f;
+      line-height: 1.35;
+    }
+
+    .transaction-amount {
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .amount-masuk {
+      color: #166534;
+    }
+
+    .amount-keluar {
+      color: #b42318;
+    }
+
+    .transaction-meta {
+      font-size: 8px;
+      color: #666;
+      line-height: 1.45;
+    }
+
+    .transaction-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 5px;
+      font-size: 8px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+
+    .badge-masuk {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-keluar {
+      background: #fee2e2;
+      color: #b42318;
+    }
+
+    .empty-card {
+      background: #ececf0;
+      border-radius: 12px;
+      padding: 14px 12px;
+      text-align: center;
+      color: #666;
+    }
+
+    .empty-card i {
+      font-size: 22px;
+      color: #7a84ff;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .empty-card strong {
+      display: block;
+      font-size: 10px;
+      color: #2f3b54;
+      margin-bottom: 4px;
+    }
+
+    .empty-card span {
+      display: block;
+      font-size: 9px;
+      line-height: 1.45;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 64px;
+      background: #2f3b54;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      overflow: hidden;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.82);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .nav-item i {
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      color: #ffffff;
+    }
+
+    @media (min-width: 391px) {
+      .app {
+        max-height: 760px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-top" id="flashWrap">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <header class="header">
+      <div class="topbar">
+        <a href="{{ url_for('dashboard_warga') }}" class="back-link">
+          <i class="ri-arrow-left-line"></i>
+        </a>
+        <a href="{{ url_for('logout') }}" class="logout">logout</a>
+      </div>
+
+      <div class="title-wrap">
+        <div class="page-label">Warga</div>
+        <div class="page-title">Laporan Keuangan</div>
+        <div class="page-desc">
+          Pantau pemasukan, pengeluaran, dan saldo kas RT secara ringkas dari halaman ini.
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-main">
+          <div class="summary-main-label">Saldo Kas Saat Ini</div>
+          <div class="summary-main-value">Rp {{ summary.saldo_fmt }}</div>
+        </div>
+
+        <div class="summary-row">
+          <div class="summary-card">
+            <div class="summary-card-label">Total Masuk</div>
+            <div class="summary-card-value summary-green">Rp {{ summary.total_masuk_fmt }}</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-card-label">Total Keluar</div>
+            <div class="summary-card-value summary-red">Rp {{ summary.total_keluar_fmt }}</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <section>
+        <div class="section-head">
+          <div class="section-title">Daftar Transaksi</div>
+          <div class="section-sub">{{ summary.total_data }} data</div>
+        </div>
+      </section>
+
+      <section class="hint-card">
+        <div class="hint-title">Informasi</div>
+        <div class="hint-text">
+          Semua data keuangan pada halaman ini ditampilkan sebagai informasi untuk warga. Anda bisa melihat ringkasan saldo kas dan daftar transaksi terbaru secara langsung.
+        </div>
+      </section>
+
+      <section>
+        <div class="transaction-list">
+          {% if keuangan_list %}
+            {% for item in keuangan_list %}
+              {% set is_masuk = item.jenis_display == 'masuk' %}
+              <div class="transaction-card">
+                <div class="transaction-icon {{ 'icon-masuk' if is_masuk else 'icon-keluar' }}">
+                  <i class="{{ 'ri-arrow-left-down-line' if is_masuk else 'ri-arrow-right-up-line' }}"></i>
+                </div>
+
+                <div class="transaction-body">
+                  <div class="transaction-top">
+                    <div class="transaction-title">{{ item.keterangan_display or '-' }}</div>
+                    <div class="transaction-amount {{ 'amount-masuk' if is_masuk else 'amount-keluar' }}">
+                      {{ '+' if is_masuk else '-' }} Rp {{ item.jumlah_fmt }}
+                    </div>
+                  </div>
+
+                  <div class="transaction-meta">
+                    {{ item.tanggal_fmt or '-' }}
+                  </div>
+
+                  <div class="transaction-badge {{ 'badge-masuk' if is_masuk else 'badge-keluar' }}">
+                    <i class="{{ 'ri-checkbox-circle-line' if is_masuk else 'ri-indeterminate-circle-line' }}"></i>
+                    <span>{{ item.jenis_display|capitalize }}</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-card">
+              <i class="ri-wallet-3-line"></i>
+              <strong>Belum ada data keuangan</strong>
+              <span>Laporan keuangan akan muncul di sini setelah data kas RT ditambahkan oleh admin.</span>
+            </div>
+          {% endif %}
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="{{ url_for('dashboard_warga') }}" class="nav-item">
+        <i class="ri-home-5-line"></i>
+        <span>Beranda</span>
+      </a>
+      <a href="{{ url_for('laporan_kegiatan_warga') }}" class="nav-item">
+        <i class="ri-calendar-event-line"></i>
+        <span>Kegiatan</span>
+      </a>
+      <a href="{{ url_for('laporan_keuangan_warga') }}" class="nav-item active">
+        <i class="ri-wallet-3-line"></i>
+        <span>Keuangan</span>
+      </a>
+      <a href="{{ url_for('feedback_warga') }}" class="nav-item">
+        <i class="ri-chat-1-line"></i>
+        <span>Feedback</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      const flashes = document.querySelectorAll(".flash");
+      if (flashes.length > 0) {
+        setTimeout(() => {
+          flashes.forEach((flash) => flash.classList.add("hide"));
+        }, 4500);
+
+        setTimeout(() => {
+          const wrap = document.getElementById("flashWrap");
+          if (wrap) wrap.remove();
+        }, 5000);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Login Mobile</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 390px;
+      height: 100dvh;
+      background: #f2f2f2;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .top-decor {
+      position: relative;
+      height: 34%;
+      min-height: 220px;
+      background: #1f2738;
+      overflow: hidden;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(55, 82, 155, 0.35);
+      box-shadow: inset -12px -8px 0 rgba(8, 12, 20, 0.55);
+    }
+
+    .b1  { width: 52px; height: 52px; top: -10px; left: -10px; }
+    .b2  { width: 40px; height: 40px; top: 8px; left: 48px; }
+    .b3  { width: 58px; height: 58px; top: -16px; right: 18px; }
+    .b4  { width: 42px; height: 42px; top: 56px; left: -6px; }
+    .b5  { width: 38px; height: 38px; top: 66px; left: 84px; }
+    .b6  { width: 52px; height: 52px; top: 58px; right: 42px; }
+    .b7  { width: 56px; height: 56px; top: 104px; left: 38px; }
+    .b8  { width: 46px; height: 46px; top: 116px; left: 118px; }
+    .b9  { width: 40px; height: 40px; top: 122px; right: 24px; }
+    .b10 { width: 56px; height: 56px; top: 148px; left: 180px; }
+    .b11 { width: 44px; height: 44px; top: 168px; right: 78px; }
+
+    .form-card {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 68%;
+      background: #f2f2f2;
+      border-top-right-radius: 95px;
+      padding: 42px 34px 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 700;
+      color: #222;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 11px;
+      color: #9a9a9a;
+      margin-bottom: 24px;
+    }
+
+    .flash-top {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .flash {
+      padding: 11px 13px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .flash.hide {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .flash-danger {
+      background: #ffe4e6;
+      color: #b42318;
+      border: 1px solid #fecdd3;
+    }
+
+    .flash-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .flash-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #b0b0b0;
+      margin-bottom: 7px;
+    }
+
+    .input {
+      width: 100%;
+      height: 42px;
+      border: none;
+      outline: none;
+      border-radius: 12px;
+      background: #d6d6d6;
+      padding: 0 15px;
+      font-size: 12px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .input::placeholder {
+      color: #7b7b7b;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 42px;
+      border: none;
+      border-radius: 6px;
+      background: #171d1f;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .bottom-links {
+      text-align: center;
+      margin-top: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .bottom-links a {
+      text-decoration: none;
+      font-size: 10px;
+      color: #b5b5b5;
+    }
+
+    .bottom-links a:hover {
+      color: #8c8c8c;
+    }
+
+    @media (min-width: 391px) {
+      .screen {
+        height: 740px;
+        max-height: 100dvh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-top" id="flashWrap">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="top-decor">
+      <span class="bubble b1"></span>
+      <span class="bubble b2"></span>
+      <span class="bubble b3"></span>
+      <span class="bubble b4"></span>
+      <span class="bubble b5"></span>
+      <span class="bubble b6"></span>
+      <span class="bubble b7"></span>
+      <span class="bubble b8"></span>
+      <span class="bubble b9"></span>
+      <span class="bubble b10"></span>
+      <span class="bubble b11"></span>
+    </div>
+
+    <div class="form-card">
+      <h1 class="title">Login</h1>
+      <p class="subtitle">Sign into continue</p>
+
+      <form method="POST" action="{{ url_for('login') }}">
+        <div class="form-group">
+          <label class="form-label">NO HP</label>
+          <input
+            type="tel"
+            class="input"
+            name="phone"
+            autocomplete="tel"
+            inputmode="numeric"
+            required
+            placeholder="Masukan Nomor HP..."
+            value="{{ request.form.get('phone', '') }}"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">PASSWORD</label>
+          <input
+            type="password"
+            class="input"
+            name="password"
+            autocomplete="current-password"
+            required
+            placeholder="Masukan Password..."
+          >
+        </div>
+
+        <button type="submit" class="login-btn">Log In</button>
+
+        <div class="bottom-links">
+          <a href="{{ url_for('forgot_password') }}">Forgot Password?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      const flashes = document.querySelectorAll(".flash");
+      if (flashes.length > 0) {
+        setTimeout(() => {
+          flashes.forEach((flash) => flash.classList.add("hide"));
+        }, 5000);
+
+        setTimeout(() => {
+          const wrap = document.getElementById("flashWrap");
+          if (wrap) wrap.remove();
+        }, 5400);
+      }
+    });
+  </script>
+</body>
+</html>

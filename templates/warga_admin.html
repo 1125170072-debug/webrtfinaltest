@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Data Warga Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      height: 100dvh;
+      background: #f3f4f8;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flash-top {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .flash {
+      padding: 11px 13px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .flash.hide {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .flash-danger {
+      background: #ffe4e6;
+      color: #b42318;
+      border: 1px solid #fecdd3;
+    }
+
+    .flash-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .flash-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .header {
+      background: linear-gradient(180deg, #37445d 0%, #2f3b54 100%);
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      padding: 14px 12px 12px;
+      height: 270px;
+      color: #fff;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    .logout {
+      color: #ffd452;
+      font-size: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .welcome-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .welcome-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .user-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f2f2f2;
+      color: #2f3b54;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+    }
+
+    .welcome-text {
+      min-width: 0;
+      line-height: 1.15;
+    }
+
+    .welcome-text span {
+      display: block;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+    }
+
+    .welcome-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 165px;
+    }
+
+    .welcome-right {
+      text-align: right;
+      flex-shrink: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 7px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .helper-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 8.8px;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 10px;
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .search-box input {
+      width: 100%;
+      height: 36px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: #f4f4f4;
+      color: #555;
+      font-size: 12px;
+      padding: 0 38px 0 12px;
+    }
+
+    .search-box input::placeholder {
+      color: #9c9c9c;
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 17px;
+      color: #5d6bff;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 132px;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .toolbar select,
+    .toolbar a {
+      width: 100%;
+      height: 34px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: #f4f4f4;
+      color: #555;
+      font-size: 11px;
+      padding: 0 10px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .add-btn {
+      background: #ffd452 !important;
+      color: #2f3b54 !important;
+    }
+
+    .content {
+      height: calc(100dvh - 270px - 64px);
+      padding: 14px 12px 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .content::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #252525;
+      margin-bottom: 10px;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .summary-card {
+      background: #ececf0;
+      border-radius: 8px;
+      padding: 10px 8px;
+      min-height: 78px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .summary-label {
+      font-size: 8.5px;
+      color: #666;
+      line-height: 1.3;
+    }
+
+    .summary-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1f1f1f;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .filter-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .filter-text {
+      font-size: 9.5px;
+      color: #6b7280;
+    }
+
+    .btn-reset {
+      border: none;
+      background: transparent;
+      color: #5d6bff;
+      font-size: 9.5px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .resident-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+
+    .resident-card {
+      background: #ececf0;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .resident-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .resident-top {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .resident-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #2f3b54;
+      color: #fff;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .resident-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .resident-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+
+    .resident-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1f1f1f;
+      line-height: 1.35;
+    }
+
+    .resident-age {
+      font-size: 8px;
+      color: #8c8c8c;
+      flex-shrink: 0;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 7.5px;
+      font-weight: 600;
+      text-transform: capitalize;
+      line-height: 1;
+    }
+
+    .badge-role-kepala_keluarga {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .badge-role-istri {
+      background: #fce7f3;
+      color: #be185d;
+    }
+
+    .badge-role-anak {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-role-lainnya {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+
+    .badge-home-rumah_sendiri {
+      background: #ede9fe;
+      color: #6d28d9;
+    }
+
+    .badge-home-kontrak,
+    .badge-home-kos,
+    .badge-home-menumpang {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-account-linked {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-account-unlinked {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .resident-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .info-box {
+      background: #f8f8fb;
+      border: 1px solid #dfe3ea;
+      border-radius: 8px;
+      padding: 8px;
+      min-height: 58px;
+    }
+
+    .info-label {
+      display: block;
+      font-size: 7.5px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 4px;
+      letter-spacing: 0.2px;
+    }
+
+    .info-value {
+      font-size: 9px;
+      color: #374151;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .address-box {
+      background: #f8f8fb;
+      border: 1px solid #dfe3ea;
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-top: 2px;
+    }
+
+    .btn-action {
+      border: none;
+      border-radius: 8px;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 8px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-edit {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .btn-delete {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .empty-card {
+      background: #ececf0;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 10px;
+      color: #6a6a6a;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 64px;
+      background: #2f3b54;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      overflow: hidden;
+      z-index: 1300;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.82);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .nav-item i {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      color: #ffffff;
+    }
+
+    .nav-button {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .laporan-menu {
+      position: absolute;
+      left: 50%;
+      bottom: 74px;
+      transform: translateX(-50%);
+      width: 220px;
+      background: #f3f4f8;
+      border-radius: 14px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+      padding: 8px;
+      z-index: 1400;
+    }
+
+    .laporan-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #2f3b54;
+      background: #ececf0;
+      border-radius: 10px;
+      padding: 12px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .laporan-menu-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .laporan-menu-item i {
+      font-size: 18px;
+      color: #5d6bff;
+    }
+
+    .laporan-overlay {
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      z-index: 1350;
+    }
+
+    @media (min-width: 391px) {
+      .app {
+        max-height: 760px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-top" id="flashWrap">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <header class="header">
+      <div class="topbar">
+        <a href="{{ url_for('logout') }}" class="logout">logout</a>
+      </div>
+
+      <div class="welcome-row">
+        <div class="welcome-left">
+          <div class="user-logo">
+            {{ (name or 'A')[0]|upper }}
+          </div>
+          <div class="welcome-text">
+            <span>Admin</span>
+            <strong>{{ name or 'Admin' }}</strong>
+          </div>
+        </div>
+
+        <div class="welcome-right">
+          <div>{{ current_day_name }}, {{ current_day }} {{ current_month_name }} {{ current_year }}</div>
+          <div>Jam {{ current_time_only[:5] }}</div>
+        </div>
+      </div>
+
+      <div class="helper-box">
+        Semua warga bisa ditambahkan tanpa akun login. Akun hanya dikaitkan bila diperlukan.
+        Warga yang belum punya akun tetap aman tersimpan di data warga.
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Cari nama, gender, agama, alamat, no hp..."
+        />
+        <i class="ri-search-line"></i>
+      </div>
+
+      <div class="toolbar">
+        <select id="sortSelect">
+          <option value="default">Urutkan: Default</option>
+          <option value="name-asc">Nama A-Z</option>
+          <option value="name-desc">Nama Z-A</option>
+          <option value="age-desc">Usia Tertua</option>
+          <option value="age-asc">Usia Termuda</option>
+          <option value="kepala-first">Kepala Keluarga</option>
+          <option value="children-desc">Jumlah Anak Terbanyak</option>
+        </select>
+
+        <select id="quickFilter">
+          <option value="all">Semua Status</option>
+          <option value="kepala_keluarga">Kepala Keluarga</option>
+          <option value="istri">Istri</option>
+          <option value="anak">Anak</option>
+          <option value="lainnya">Lainnya</option>
+        </select>
+      </div>
+
+      <div class="toolbar">
+        <a href="{{ url_for('create_warga_admin') }}" class="add-btn">
+          <i class="ri-user-add-line" style="margin-right:6px;"></i> Tambah Warga
+        </a>
+        <a href="{{ url_for('warga_admin') }}">
+          <i class="ri-refresh-line" style="margin-right:6px;"></i> Muat Ulang
+        </a>
+      </div>
+    </header>
+
+    <main class="content">
+      <section>
+        <h3 class="section-title">Ringkasan Warga</h3>
+        <div class="summary-row">
+          <div class="summary-card">
+            <div class="summary-label">Total Warga</div>
+            <div class="summary-value" id="totalWarga">{{ warga_list|length }}</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Kepala Keluarga</div>
+            <div class="summary-value" id="totalKepala">0</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Rata-rata Usia</div>
+            <div class="summary-value" id="avgUsia">0 th</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="filter-info">
+          <div class="filter-text" id="filterText">Menampilkan semua data warga</div>
+          <button type="button" class="btn-reset hidden" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="resident-list" id="residentList">
+          {% if warga_list %}
+            {% for item in warga_list %}
+              {% set akun_terkait = item.id_user is not none %}
+              <div
+                class="resident-card"
+                data-id-warga="{{ item.id_warga }}"
+                data-name="{{ (item.nama_lengkap or '-')|lower }}"
+                data-role="{{ (item.status_dalam_keluarga or '-')|lower }}"
+                data-gender="{{ (item.gender or '-')|lower }}"
+                data-agama="{{ (item.agama or '-')|lower }}"
+                data-home="{{ (item.status_kepemilikan_rumah or '-')|lower }}"
+                data-children="{{ item.jumlah_anak or 0 }}"
+                data-birth="{{ item.tanggal_lahir_iso or '' }}"
+                data-address="{{ (item.alamat or '-')|lower }}"
+                data-phone="{{ (item.phone or '-')|lower }}"
+                data-account="{{ 'terkait' if akun_terkait else 'belum_ada_akun' }}"
+                data-search="{{ (
+                  (item.nama_lengkap or '-') ~ ' ' ~
+                  (item.gender or '-') ~ ' ' ~
+                  (item.status_dalam_keluarga or '-') ~ ' ' ~
+                  (item.tempat_lahir or '-') ~ ' ' ~
+                  (item.tanggal_lahir_fmt or '-') ~ ' ' ~
+                  (item.agama or '-') ~ ' ' ~
+                  (item.status_kepemilikan_rumah or '-') ~ ' ' ~
+                  (item.alamat or '-') ~ ' ' ~
+                  (item.phone or '-') ~ ' ' ~
+                  ('akun terkait' if akun_terkait else 'belum ada akun')
+                )|lower }}"
+              >
+                <div class="resident-top">
+                  <div class="resident-avatar">
+                    {{ (item.nama_lengkap or 'A')[0]|upper }}
+                  </div>
+
+                  <div class="resident-body">
+                    <div class="resident-meta">
+                      <div class="resident-name">{{ item.nama_lengkap or '-' }}</div>
+                      <div class="resident-age">
+                        <span class="age-text">0 tahun</span>
+                      </div>
+                    </div>
+
+                    <div class="badge-row">
+                      <span class="badge badge-role-{{ item.status_dalam_keluarga or 'lainnya' }}">
+                        {{ (item.status_dalam_keluarga or '-')|replace('_', ' ') }}
+                      </span>
+                      <span class="badge badge-home-{{ item.status_kepemilikan_rumah or 'menumpang' }}">
+                        {{ (item.status_kepemilikan_rumah or '-')|replace('_', ' ') }}
+                      </span>
+                      <span class="badge {{ 'badge-account-linked' if akun_terkait else 'badge-account-unlinked' }}">
+                        {{ 'akun terkait' if akun_terkait else 'belum ada akun' }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="resident-grid">
+                  <div class="info-box">
+                    <span class="info-label">Jenis Kelamin</span>
+                    <div class="info-value">{{ item.gender or '-' }}</div>
+                  </div>
+
+                  <div class="info-box">
+                    <span class="info-label">Agama</span>
+                    <div class="info-value">{{ item.agama or '-' }}</div>
+                  </div>
+
+                  <div class="info-box">
+                    <span class="info-label">Tempat, Tgl Lahir</span>
+                    <div class="info-value">
+                      {{ item.tempat_lahir or '-' }}, {{ item.tanggal_lahir_fmt or '-' }}
+                    </div>
+                  </div>
+
+                  <div class="info-box">
+                    <span class="info-label">Jumlah Anak</span>
+                    <div class="info-value">{{ item.jumlah_anak or 0 }}</div>
+                  </div>
+
+                  <div class="info-box">
+                    <span class="info-label">No HP / Akun</span>
+                    <div class="info-value">
+                      {% if akun_terkait %}
+                        {{ item.phone or '-' }}
+                      {% else %}
+                        Belum dikaitkan
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="info-box">
+                    <span class="info-label">Status Rumah</span>
+                    <div class="info-value">{{ (item.status_kepemilikan_rumah or '-')|replace('_', ' ') }}</div>
+                  </div>
+                </div>
+
+                <div class="address-box">
+                  <span class="info-label">Alamat</span>
+                  <div class="info-value">{{ item.alamat or '-' }}</div>
+                </div>
+
+                <div class="card-actions">
+                  <a
+                    href="{{ url_for('edit_warga_admin', id_warga=item.id_warga) }}"
+                    class="btn-action btn-edit"
+                  >
+                    Edit
+                  </a>
+
+                  <form
+                    method="POST"
+                    action="{{ url_for('delete_warga_admin', id_warga=item.id_warga) }}"
+                    onsubmit="return confirm('Yakin ingin menghapus data warga ini?')"
+                  >
+                    <button type="submit" class="btn-action btn-delete">
+                      Hapus
+                    </button>
+                  </form>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-card" id="emptyInitial">
+              Belum ada data warga.
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="empty-card hidden" id="emptySearch">
+          Tidak ada data warga yang cocok.
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="{{ url_for('dashboard_admin') }}" class="nav-item">
+        <i class="ri-home-5-line"></i>
+        <span>Beranda</span>
+      </a>
+
+      <button type="button" class="nav-item nav-button" id="laporanBtn">
+        <i class="ri-file-list-3-line"></i>
+        <span>Laporan</span>
+      </button>
+
+      <a href="{{ url_for('warga_admin') }}" class="nav-item active">
+        <i class="ri-user-3-line"></i>
+        <span>Warga</span>
+      </a>
+
+      <a href="{{ url_for('feedback_admin') }}" class="nav-item">
+        <i class="ri-chat-1-line"></i>
+        <span>Feedback</span>
+      </a>
+    </nav>
+
+    <div class="laporan-menu hidden" id="laporanMenu">
+      <a href="{{ url_for('kegiatan_admin') }}" class="laporan-menu-item">
+        <i class="ri-calendar-check-line"></i>
+        <span>Laporan Kegiatan</span>
+      </a>
+      <a href="{{ url_for('keuangan_admin') }}" class="laporan-menu-item">
+        <i class="ri-wallet-3-line"></i>
+        <span>Laporan Keuangan</span>
+      </a>
+    </div>
+
+    <div class="laporan-overlay hidden" id="laporanOverlay"></div>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      const flashes = document.querySelectorAll(".flash");
+      if (flashes.length > 0) {
+        setTimeout(() => {
+          flashes.forEach((flash) => flash.classList.add("hide"));
+        }, 5000);
+
+        setTimeout(() => {
+          const wrap = document.getElementById("flashWrap");
+          if (wrap) wrap.remove();
+        }, 5400);
+      }
+
+      const searchInput = document.getElementById("searchInput");
+      const sortSelect = document.getElementById("sortSelect");
+      const quickFilter = document.getElementById("quickFilter");
+      const residentList = document.getElementById("residentList");
+      const filterText = document.getElementById("filterText");
+      const resetBtn = document.getElementById("resetBtn");
+      const emptySearch = document.getElementById("emptySearch");
+      const emptyInitial = document.getElementById("emptyInitial");
+      const totalWargaEl = document.getElementById("totalWarga");
+      const totalKepalaEl = document.getElementById("totalKepala");
+      const avgUsiaEl = document.getElementById("avgUsia");
+
+      const cards = Array.from(document.querySelectorAll(".resident-card"));
+      const total = cards.length;
+
+      function calculateAge(isoDate) {
+        if (!isoDate) return 0;
+        const birth = new Date(isoDate);
+        if (Number.isNaN(birth.getTime())) return 0;
+
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        const monthDiff = today.getMonth() - birth.getMonth();
+        const dayDiff = today.getDate() - birth.getDate();
+
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+          age--;
+        }
+
+        return age < 0 ? 0 : age;
+      }
+
+      cards.forEach((card) => {
+        const age = calculateAge(card.dataset.birth || "");
+        card.dataset.age = age;
+
+        const ageText = card.querySelector(".age-text");
+        if (ageText) {
+          ageText.textContent = `${age} tahun`;
+        }
+      });
+
+      function compareCards(a, b, sortValue) {
+        const nameA = a.dataset.name || "";
+        const nameB = b.dataset.name || "";
+        const ageA = parseInt(a.dataset.age || "0", 10);
+        const ageB = parseInt(b.dataset.age || "0", 10);
+        const roleA = a.dataset.role || "";
+        const roleB = b.dataset.role || "";
+        const childA = parseInt(a.dataset.children || "0", 10);
+        const childB = parseInt(b.dataset.children || "0", 10);
+
+        switch (sortValue) {
+          case "name-asc":
+            return nameA.localeCompare(nameB, "id");
+          case "name-desc":
+            return nameB.localeCompare(nameA, "id");
+          case "age-desc":
+            return ageB - ageA || nameA.localeCompare(nameB, "id");
+          case "age-asc":
+            return ageA - ageB || nameA.localeCompare(nameB, "id");
+          case "kepala-first":
+            if (roleA === "kepala_keluarga" && roleB !== "kepala_keluarga") return -1;
+            if (roleA !== "kepala_keluarga" && roleB === "kepala_keluarga") return 1;
+            return nameA.localeCompare(nameB, "id");
+          case "children-desc":
+            return childB - childA || nameA.localeCompare(nameB, "id");
+          default:
+            return 0;
+        }
+      }
+
+      function sortCards() {
+        const sorted = [...cards].sort((a, b) => compareCards(a, b, sortSelect.value));
+        sorted.forEach((card) => residentList.appendChild(card));
+      }
+
+      function updateSummary(visibleCards) {
+        const kepalaCount = visibleCards.filter(
+          (card) => (card.dataset.role || "") === "kepala_keluarga"
+        ).length;
+
+        const totalAge = visibleCards.reduce((sum, card) => {
+          return sum + parseInt(card.dataset.age || "0", 10);
+        }, 0);
+
+        const avgAge = visibleCards.length > 0
+          ? Math.round(totalAge / visibleCards.length)
+          : 0;
+
+        totalWargaEl.textContent = visibleCards.length;
+        totalKepalaEl.textContent = kepalaCount;
+        avgUsiaEl.textContent = `${avgAge} th`;
+      }
+
+      function applyFilters() {
+        const keyword = (searchInput.value || "").trim().toLowerCase();
+        const roleFilter = quickFilter.value;
+        let shown = 0;
+
+        cards.forEach((card) => {
+          const haystack = card.dataset.search || "";
+          const role = card.dataset.role || "";
+
+          const matchKeyword = keyword === "" || haystack.includes(keyword);
+          const matchRole = roleFilter === "all" || role === roleFilter;
+          const visible = matchKeyword && matchRole;
+
+          if (visible) {
+            card.classList.remove("hidden");
+            shown += 1;
+          } else {
+            card.classList.add("hidden");
+          }
+        });
+
+        const visibleCards = cards.filter((card) => !card.classList.contains("hidden"));
+        updateSummary(visibleCards);
+
+        if (keyword || roleFilter !== "all" || sortSelect.value !== "default") {
+          const parts = [];
+          if (keyword) parts.push(`cari "${keyword}"`);
+          if (roleFilter !== "all") parts.push(`filter ${roleFilter.replaceAll("_", " ")}`);
+          if (sortSelect.value !== "default") {
+            parts.push(`sort ${sortSelect.options[sortSelect.selectedIndex].text.replace("Urutkan: ", "")}`);
+          }
+          filterText.textContent = `${shown} dari ${total} warga • ${parts.join(" • ")}`;
+          resetBtn.classList.remove("hidden");
+        } else {
+          filterText.textContent = "Menampilkan semua data warga";
+          resetBtn.classList.add("hidden");
+        }
+
+        if (emptyInitial) {
+          emptyInitial.classList.add("hidden");
+        }
+
+        if (total > 0 && shown === 0) {
+          emptySearch.classList.remove("hidden");
+        } else {
+          emptySearch.classList.add("hidden");
+        }
+      }
+
+      sortCards();
+      applyFilters();
+
+      if (searchInput) {
+        searchInput.addEventListener("input", applyFilters);
+      }
+
+      if (quickFilter) {
+        quickFilter.addEventListener("change", applyFilters);
+      }
+
+      if (sortSelect) {
+        sortSelect.addEventListener("change", function () {
+          sortCards();
+          applyFilters();
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          quickFilter.value = "all";
+          sortSelect.value = "default";
+          sortCards();
+          applyFilters();
+          searchInput.focus();
+        });
+      }
+
+      const laporanBtn = document.getElementById("laporanBtn");
+      const laporanMenu = document.getElementById("laporanMenu");
+      const laporanOverlay = document.getElementById("laporanOverlay");
+
+      function openLaporanMenu() {
+        laporanMenu.classList.remove("hidden");
+        laporanOverlay.classList.remove("hidden");
+      }
+
+      function closeLaporanMenu() {
+        laporanMenu.classList.add("hidden");
+        laporanOverlay.classList.add("hidden");
+      }
+
+      if (laporanBtn && laporanMenu && laporanOverlay) {
+        laporanBtn.addEventListener("click", function () {
+          const isHidden = laporanMenu.classList.contains("hidden");
+          if (isHidden) {
+            openLaporanMenu();
+          } else {
+            closeLaporanMenu();
+          }
+        });
+
+        laporanOverlay.addEventListener("click", closeLaporanMenu);
+      }
+    });
+  </script>
+</body>
+</html>

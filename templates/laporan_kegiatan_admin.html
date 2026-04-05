@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Laporan Kegiatan Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      height: 100dvh;
+      background: #f3f4f8;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flash-top {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .flash {
+      padding: 11px 13px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .flash.hide {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .flash-danger {
+      background: #ffe4e6;
+      color: #b42318;
+      border: 1px solid #fecdd3;
+    }
+
+    .flash-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .flash-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .header {
+      background: linear-gradient(180deg, #37445d 0%, #2f3b54 100%);
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      padding: 14px 12px 12px;
+      height: 182px;
+      color: #fff;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    .logout {
+      color: #ffd452;
+      font-size: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .welcome-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .welcome-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .user-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f2f2f2;
+      color: #2f3b54;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+    }
+
+    .welcome-text {
+      min-width: 0;
+      line-height: 1.15;
+    }
+
+    .welcome-text span {
+      display: block;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+    }
+
+    .welcome-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 165px;
+    }
+
+    .welcome-right {
+      text-align: right;
+      flex-shrink: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 7px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .search-box {
+      position: relative;
+      margin-top: 6px;
+    }
+
+    .search-box input {
+      width: 100%;
+      height: 36px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: #f4f4f4;
+      color: #555;
+      font-size: 12px;
+      padding: 0 38px 0 12px;
+    }
+
+    .search-box input::placeholder {
+      color: #9c9c9c;
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 17px;
+      color: #5d6bff;
+    }
+
+    .content {
+      height: calc(100dvh - 182px - 64px);
+      padding: 14px 12px 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .content::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #252525;
+      margin-bottom: 10px;
+    }
+
+    .form-card {
+      background: #ececf0;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 8.5px;
+      font-weight: 600;
+      color: #4b5563;
+      margin-bottom: 4px;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      height: 36px;
+      border: 1px solid #d1d5db;
+      outline: none;
+      border-radius: 8px;
+      background: #fff;
+      color: #374151;
+      font-size: 11px;
+      padding: 0 10px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 8px;
+      font-size: 9.5px;
+      font-weight: 600;
+      padding: 9px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: #2f3b54;
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #d1d5db;
+      color: #111827;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .summary-card {
+      background: #ececf0;
+      border-radius: 8px;
+      padding: 10px 8px;
+      min-height: 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .summary-label {
+      font-size: 8.5px;
+      color: #666;
+      line-height: 1.3;
+    }
+
+    .summary-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1f1f1f;
+      line-height: 1.2;
+    }
+
+    .filter-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .filter-text {
+      font-size: 9.5px;
+      color: #6b7280;
+    }
+
+    .btn-reset {
+      border: none;
+      background: transparent;
+      color: #5d6bff;
+      font-size: 9.5px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+
+    .activity-card {
+      background: #ececf0;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .activity-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .activity-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #1f1f1f;
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 7.5px;
+      font-weight: 600;
+      text-transform: capitalize;
+      flex-shrink: 0;
+    }
+
+    .status-rencana {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .status-proses {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .status-selesai {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-default {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+
+    .activity-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 9.5px;
+      color: #4b5563;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .meta-item i {
+      color: #6e78ff;
+      font-size: 13px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-top: 4px;
+    }
+
+    .btn-edit {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .btn-delete {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .empty-card {
+      background: #ececf0;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 10px;
+      color: #6a6a6a;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 64px;
+      background: #2f3b54;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      overflow: hidden;
+      z-index: 1300;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.82);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .nav-item i {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      color: #ffffff;
+    }
+
+    .nav-button {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .laporan-menu {
+      position: absolute;
+      left: 50%;
+      bottom: 74px;
+      transform: translateX(-50%);
+      width: 220px;
+      background: #f3f4f8;
+      border-radius: 14px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+      padding: 8px;
+      z-index: 1400;
+    }
+
+    .laporan-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #2f3b54;
+      background: #ececf0;
+      border-radius: 10px;
+      padding: 12px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .laporan-menu-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .laporan-menu-item i {
+      font-size: 18px;
+      color: #5d6bff;
+    }
+
+    .laporan-overlay {
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      z-index: 1350;
+    }
+
+    @media (min-width: 391px) {
+      .app {
+        max-height: 760px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-top" id="flashWrap">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <header class="header">
+      <div class="topbar">
+        <a href="{{ url_for('logout') }}" class="logout">logout</a>
+      </div>
+
+      <div class="welcome-row">
+        <div class="welcome-left">
+          <div class="user-logo">
+            {{ (name or 'A')[0]|upper }}
+          </div>
+          <div class="welcome-text">
+            <span>Admin</span>
+            <strong>{{ name or 'Admin' }}</strong>
+          </div>
+        </div>
+
+        <div class="welcome-right">
+          <div>{{ current_day_name }}, {{ current_day }} {{ current_month_name }} {{ current_year }}</div>
+          <div>Jam {{ current_time_only[:5] }}</div>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Cari judul, lokasi, status, tanggal..."
+        />
+        <i class="ri-search-line"></i>
+      </div>
+    </header>
+
+    <main class="content">
+      <section>
+        <h3 class="section-title">
+          {% if edit_data %}Edit Kegiatan{% else %}Tambah Kegiatan{% endif %}
+        </h3>
+
+        <form
+          class="form-card"
+          method="POST"
+          action="{% if edit_data %}{{ url_for('update_kegiatan_admin', id_kegiatan=edit_data.id_kegiatan) }}{% else %}{{ url_for('create_kegiatan_admin') }}{% endif %}"
+        >
+          <div>
+            <label class="form-label">Judul Kegiatan</label>
+            <input
+              type="text"
+              name="judul_kegiatan"
+              class="form-input"
+              placeholder="Masukkan judul kegiatan"
+              value="{{ edit_data.judul_display if edit_data else '' }}"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <div>
+              <label class="form-label">Tanggal</label>
+              <input
+                type="date"
+                name="tanggal_kegiatan"
+                class="form-input"
+                value="{{ edit_data.tanggal_input if edit_data else '' }}"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="form-label">Waktu</label>
+              <input
+                type="time"
+                name="waktu_kegiatan"
+                class="form-input"
+                value="{{ edit_data.waktu_input if edit_data else '' }}"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Lokasi</label>
+            <input
+              type="text"
+              name="lokasi"
+              class="form-input"
+              placeholder="Masukkan lokasi"
+              value="{{ edit_data.lokasi_display if edit_data else '' }}"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select" required>
+              <option value="rencana" {% if edit_data and edit_data.status_display == 'rencana' %}selected{% endif %}>Rencana</option>
+              <option value="proses" {% if edit_data and edit_data.status_display == 'proses' %}selected{% endif %}>Proses</option>
+              <option value="selesai" {% if edit_data and edit_data.status_display == 'selesai' %}selected{% endif %}>Selesai</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            {% if edit_data %}
+              <a href="{{ url_for('kegiatan_admin') }}" class="btn btn-secondary">Batal</a>
+              <button type="submit" class="btn btn-primary">Update</button>
+            {% else %}
+              <button type="submit" class="btn btn-primary">Tambah</button>
+            {% endif %}
+          </div>
+        </form>
+      </section>
+
+      <section>
+        <h3 class="section-title">Ringkasan Kegiatan</h3>
+        <div class="summary-row">
+          <div class="summary-card">
+            <div class="summary-label">Total</div>
+            <div class="summary-value" id="totalCount">{{ kegiatan_list|length }}</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Tampil</div>
+            <div class="summary-value" id="visibleCount">{{ kegiatan_list|length }}</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Pencarian</div>
+            <div class="summary-value" id="searchState">Semua</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="filter-info">
+          <div class="filter-text" id="filterText">Menampilkan semua kegiatan</div>
+          <button type="button" class="btn-reset hidden" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="activity-list" id="activityList">
+          {% if kegiatan_list %}
+            {% for item in kegiatan_list %}
+              {% set status_class = 'status-' + item.status_display if item.status_display in ['rencana', 'proses', 'selesai'] else 'status-default' %}
+              <div
+                class="activity-card"
+                data-search="{{ (item.judul_display ~ ' ' ~ item.lokasi_display ~ ' ' ~ item.status_display ~ ' ' ~ item.tanggal_fmt ~ ' ' ~ item.waktu_fmt)|lower }}"
+              >
+                <div class="activity-top">
+                  <div class="activity-title">{{ item.judul_display }}</div>
+                  <span class="status-badge {{ status_class }}">
+                    {{ item.status_display }}
+                  </span>
+                </div>
+
+                <div class="activity-meta">
+                  <div class="meta-item">
+                    <i class="ri-calendar-2-line"></i>
+                    <span>{{ item.tanggal_fmt }}</span>
+                  </div>
+
+                  <div class="meta-item">
+                    <i class="ri-time-line"></i>
+                    <span>{{ item.waktu_fmt }}</span>
+                  </div>
+
+                  <div class="meta-item">
+                    <i class="ri-map-pin-line"></i>
+                    <span>{{ item.lokasi_display }}</span>
+                  </div>
+                </div>
+
+                <div class="card-actions">
+                  <a href="{{ url_for('kegiatan_admin', edit=item.id_kegiatan) }}" class="btn btn-edit">Edit</a>
+
+                  <form
+                    method="POST"
+                    action="{{ url_for('delete_kegiatan_admin', id_kegiatan=item.id_kegiatan) }}"
+                    onsubmit="return confirm('Yakin ingin menghapus kegiatan ini?')"
+                  >
+                    <button type="submit" class="btn btn-delete">Hapus</button>
+                  </form>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-card" id="emptyInitial">
+              Belum ada data kegiatan.
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="empty-card hidden" id="emptySearch">
+          Tidak ada kegiatan yang cocok dengan pencarian Anda.
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="{{ url_for('dashboard_admin') }}" class="nav-item">
+        <i class="ri-home-5-line"></i>
+        <span>Beranda</span>
+      </a>
+
+      <button type="button" class="nav-item nav-button active" id="laporanBtn">
+        <i class="ri-file-list-3-line"></i>
+        <span>Laporan</span>
+      </button>
+
+      <a href="{{ url_for('warga_admin') }}" class="nav-item">
+        <i class="ri-user-3-line"></i>
+        <span>Warga</span>
+      </a>
+
+      <a href="{{ url_for('feedback_admin') }}" class="nav-item">
+        <i class="ri-chat-1-line"></i>
+        <span>Feedback</span>
+      </a>
+    </nav>
+
+    <div class="laporan-menu hidden" id="laporanMenu">
+      <a href="{{ url_for('kegiatan_admin') }}" class="laporan-menu-item">
+        <i class="ri-calendar-check-line"></i>
+        <span>Laporan Kegiatan</span>
+      </a>
+      <a href="{{ url_for('keuangan_admin') }}" class="laporan-menu-item">
+        <i class="ri-wallet-3-line"></i>
+        <span>Laporan Keuangan</span>
+      </a>
+    </div>
+
+    <div class="laporan-overlay hidden" id="laporanOverlay"></div>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      const flashes = document.querySelectorAll(".flash");
+      if (flashes.length > 0) {
+        setTimeout(() => {
+          flashes.forEach((flash) => flash.classList.add("hide"));
+        }, 5000);
+
+        setTimeout(() => {
+          const wrap = document.getElementById("flashWrap");
+          if (wrap) wrap.remove();
+        }, 5400);
+      }
+
+      const searchInput = document.getElementById("searchInput");
+      const cards = document.querySelectorAll(".activity-card");
+      const visibleCount = document.getElementById("visibleCount");
+      const totalCount = document.getElementById("totalCount");
+      const searchState = document.getElementById("searchState");
+      const filterText = document.getElementById("filterText");
+      const resetBtn = document.getElementById("resetBtn");
+      const emptySearch = document.getElementById("emptySearch");
+
+      const total = cards.length;
+      totalCount.textContent = total;
+      visibleCount.textContent = total;
+
+      function applySearch() {
+        const keyword = (searchInput.value || "").trim().toLowerCase();
+        let shown = 0;
+
+        cards.forEach((card) => {
+          const haystack = card.dataset.search || "";
+          const match = keyword === "" || haystack.includes(keyword);
+
+          if (match) {
+            card.classList.remove("hidden");
+            shown += 1;
+          } else {
+            card.classList.add("hidden");
+          }
+        });
+
+        visibleCount.textContent = shown;
+
+        if (keyword) {
+          searchState.textContent = "Aktif";
+          filterText.textContent = `Pencarian: "${keyword}"`;
+          resetBtn.classList.remove("hidden");
+        } else {
+          searchState.textContent = "Semua";
+          filterText.textContent = "Menampilkan semua kegiatan";
+          resetBtn.classList.add("hidden");
+        }
+
+        if (total > 0 && shown === 0) {
+          emptySearch.classList.remove("hidden");
+        } else {
+          emptySearch.classList.add("hidden");
+        }
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener("input", applySearch);
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          applySearch();
+          searchInput.focus();
+        });
+      }
+
+      const laporanBtn = document.getElementById("laporanBtn");
+      const laporanMenu = document.getElementById("laporanMenu");
+      const laporanOverlay = document.getElementById("laporanOverlay");
+
+      function openLaporanMenu() {
+        laporanMenu.classList.remove("hidden");
+        laporanOverlay.classList.remove("hidden");
+      }
+
+      function closeLaporanMenu() {
+        laporanMenu.classList.add("hidden");
+        laporanOverlay.classList.add("hidden");
+      }
+
+      if (laporanBtn && laporanMenu && laporanOverlay) {
+        laporanBtn.addEventListener("click", function () {
+          const isHidden = laporanMenu.classList.contains("hidden");
+          if (isHidden) {
+            openLaporanMenu();
+          } else {
+            closeLaporanMenu();
+          }
+        });
+
+        laporanOverlay.addEventListener("click", closeLaporanMenu);
+      }
+    });
+  </script>
+</body>
+</html>

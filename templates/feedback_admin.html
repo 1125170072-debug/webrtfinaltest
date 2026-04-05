@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Feedback Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #d9d9d9;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      height: 100dvh;
+      background: #f3f4f8;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flash-top {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .flash {
+      padding: 11px 13px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .flash.hide {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .flash-danger {
+      background: #ffe4e6;
+      color: #b42318;
+      border: 1px solid #fecdd3;
+    }
+
+    .flash-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .flash-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .header {
+      background: linear-gradient(180deg, #37445d 0%, #2f3b54 100%);
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      padding: 14px 12px 12px;
+      height: 182px;
+      color: #fff;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    .logout {
+      color: #ffd452;
+      font-size: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .welcome-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .welcome-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .user-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f2f2f2;
+      color: #2f3b54;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+    }
+
+    .welcome-text {
+      min-width: 0;
+      line-height: 1.15;
+    }
+
+    .welcome-text span {
+      display: block;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+    }
+
+    .welcome-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 165px;
+    }
+
+    .welcome-right {
+      text-align: right;
+      flex-shrink: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 7px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .search-box {
+      position: relative;
+      margin-top: 10px;
+    }
+
+    .search-box input {
+      width: 100%;
+      height: 36px;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      background: #f4f4f4;
+      color: #555;
+      font-size: 12px;
+      padding: 0 38px 0 12px;
+    }
+
+    .search-box input::placeholder {
+      color: #9c9c9c;
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 17px;
+      color: #5d6bff;
+    }
+
+    .content {
+      height: calc(100dvh - 182px - 64px);
+      padding: 14px 12px 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .content::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #252525;
+      margin-bottom: 10px;
+    }
+
+    .filter-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .filter-text {
+      font-size: 9.5px;
+      color: #6b7280;
+    }
+
+    .btn-reset {
+      border: none;
+      background: transparent;
+      color: #5d6bff;
+      font-size: 9.5px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .feedback-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+
+    .feedback-card {
+      background: #ececf0;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: box-shadow 0.25s ease, outline-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .feedback-card.focus-target {
+      outline: 2px solid #5d6bff;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(93, 107, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .feedback-top {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .feedback-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .feedback-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .feedback-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .feedback-name {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #1f1f1f;
+    }
+
+    .feedback-time {
+      font-size: 7.5px;
+      color: #8c8c8c;
+      flex-shrink: 0;
+    }
+
+    .feedback-category {
+      font-size: 8.5px;
+      color: #5d6bff;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feedback-text {
+      font-size: 8.5px;
+      color: #535353;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 7.5px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .status-baru {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .status-diproses {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .status-selesai {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .reply-box {
+      background: #f8f8fb;
+      border: 1px solid #dfe3ea;
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .reply-label {
+      font-size: 8.5px;
+      font-weight: 600;
+      color: #4b5563;
+    }
+
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      outline: none;
+      border-radius: 8px;
+      background: #fff;
+      color: #374151;
+      font-size: 9.5px;
+      padding: 8px 10px;
+    }
+
+    .form-select {
+      height: 34px;
+    }
+
+    .form-textarea {
+      min-height: 72px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    .form-textarea:focus,
+    .form-select:focus {
+      border-color: #5d6bff;
+      box-shadow: 0 0 0 3px rgba(93, 107, 255, 0.12);
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-save {
+      border: none;
+      border-radius: 8px;
+      background: #2f3b54;
+      color: #fff;
+      font-size: 9.5px;
+      font-weight: 600;
+      padding: 9px 12px;
+      cursor: pointer;
+    }
+
+    .btn-save:hover {
+      opacity: 0.92;
+    }
+
+    .empty-card {
+      background: #ececf0;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 10px;
+      color: #6a6a6a;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 64px;
+      background: #2f3b54;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      overflow: hidden;
+      z-index: 1300;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.82);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .nav-item i {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      color: #ffffff;
+    }
+
+    .nav-button {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .laporan-menu {
+      position: absolute;
+      left: 50%;
+      bottom: 74px;
+      transform: translateX(-50%);
+      width: 220px;
+      background: #f3f4f8;
+      border-radius: 14px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+      padding: 8px;
+      z-index: 1400;
+    }
+
+    .laporan-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #2f3b54;
+      background: #ececf0;
+      border-radius: 10px;
+      padding: 12px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .laporan-menu-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .laporan-menu-item i {
+      font-size: 18px;
+      color: #5d6bff;
+    }
+
+    .laporan-overlay {
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      z-index: 1350;
+    }
+
+    @media (min-width: 391px) {
+      .app {
+        max-height: 760px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-top" id="flashWrap">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <header class="header">
+      <div class="topbar">
+        <a href="{{ url_for('logout') }}" class="logout">logout</a>
+      </div>
+
+      <div class="welcome-row">
+        <div class="welcome-left">
+          <div class="user-logo">
+            {{ (name or 'A')[0]|upper }}
+          </div>
+          <div class="welcome-text">
+            <span>Admin</span>
+            <strong>{{ name or 'Admin' }}</strong>
+          </div>
+        </div>
+
+        <div class="welcome-right">
+          <div>{{ current_day_name }}, {{ current_day }} {{ current_month_name }} {{ current_year }}</div>
+          <div>Jam {{ current_time_only[:5] }}</div>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Cari nama, kategori, status, isi feedback..."
+        />
+        <i class="ri-search-line"></i>
+      </div>
+    </header>
+
+    <main class="content" id="contentArea">
+      <div class="filter-info">
+        <div class="filter-text" id="filterText">Menampilkan semua feedback</div>
+        <button type="button" class="btn-reset hidden" id="resetBtn">Reset</button>
+      </div>
+
+      <div class="feedback-list" id="feedbackList">
+        {% if feedback_list %}
+          {% for item in feedback_list %}
+            <div
+              class="feedback-card"
+              id="feedback-{{ item.id_feedback }}"
+              data-search="{{ ((item.display_name or 'Anonim') ~ ' ' ~ (item.kategori or '-') ~ ' ' ~ (item.status or '-') ~ ' ' ~ (item.isi or '') ~ ' ' ~ (item.balasan_admin or '') ~ ' ' ~ (item.created_at_fmt or '-'))|lower }}"
+            >
+              <div class="feedback-top">
+                <div class="feedback-avatar">
+                  {{ item.initial or 'A' }}
+                </div>
+
+                <div class="feedback-body">
+                  <div class="feedback-meta">
+                    <div class="feedback-name">{{ item.display_name or 'Anonim' }}</div>
+                    <div class="feedback-time">{{ item.created_at_fmt or '-' }}</div>
+                  </div>
+
+                  <div class="feedback-category">
+                    {{ item.kategori or '-' }}
+                  </div>
+
+                  <div class="feedback-text">
+                    {{ item.isi }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="status-row">
+                <span class="status-badge status-{{ item.status }}">
+                  {{ item.status }}
+                </span>
+              </div>
+
+              <form
+                action="{{ url_for('update_feedback_admin', id_feedback=item.id_feedback) }}"
+                method="POST"
+                class="reply-box"
+              >
+                <div>
+                  <label class="reply-label">Status Feedback</label>
+                  <select name="status" class="form-select">
+                    <option value="baru" {% if item.status == 'baru' %}selected{% endif %}>Baru</option>
+                    <option value="diproses" {% if item.status == 'diproses' %}selected{% endif %}>Diproses</option>
+                    <option value="selesai" {% if item.status == 'selesai' %}selected{% endif %}>Selesai</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="reply-label">Balasan Admin</label>
+                  <textarea
+                    name="balasan_admin"
+                    class="form-textarea"
+                    placeholder="Tulis balasan admin di sini..."
+                  >{{ item.balasan_admin or '' }}</textarea>
+                </div>
+
+                <div class="action-row">
+                  <button type="submit" class="btn-save">
+                    Simpan Perubahan
+                  </button>
+                </div>
+              </form>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-card" id="emptyInitial">
+            Belum ada feedback dari warga.
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="empty-card hidden" id="emptySearch">
+        Tidak ada feedback yang cocok dengan pencarian Anda.
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="{{ url_for('dashboard_admin') }}" class="nav-item">
+        <i class="ri-home-5-line"></i>
+        <span>Beranda</span>
+      </a>
+
+      <button type="button" class="nav-item nav-button" id="laporanBtn">
+        <i class="ri-file-list-3-line"></i>
+        <span>Laporan</span>
+      </button>
+
+      <a href="{{ url_for('warga_admin') }}" class="nav-item">
+        <i class="ri-user-3-line"></i>
+        <span>Warga</span>
+      </a>
+
+      <a href="{{ url_for('feedback_admin') }}" class="nav-item active">
+        <i class="ri-chat-1-line"></i>
+        <span>Feedback</span>
+      </a>
+    </nav>
+
+    <div class="laporan-menu hidden" id="laporanMenu">
+      <a href="{{ url_for('kegiatan_admin') }}" class="laporan-menu-item">
+        <i class="ri-calendar-check-line"></i>
+        <span>Laporan Kegiatan</span>
+      </a>
+      <a href="{{ url_for('keuangan_admin') }}" class="laporan-menu-item">
+        <i class="ri-wallet-3-line"></i>
+        <span>Laporan Keuangan</span>
+      </a>
+    </div>
+
+    <div class="laporan-overlay hidden" id="laporanOverlay"></div>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      const flashes = document.querySelectorAll(".flash");
+      if (flashes.length > 0) {
+        setTimeout(() => {
+          flashes.forEach((flash) => flash.classList.add("hide"));
+        }, 5000);
+
+        setTimeout(() => {
+          const wrap = document.getElementById("flashWrap");
+          if (wrap) wrap.remove();
+        }, 5400);
+      }
+
+      const searchInput = document.getElementById("searchInput");
+      const cards = document.querySelectorAll(".feedback-card");
+      const filterText = document.getElementById("filterText");
+      const resetBtn = document.getElementById("resetBtn");
+      const emptySearch = document.getElementById("emptySearch");
+      const emptyInitial = document.getElementById("emptyInitial");
+
+      const total = cards.length;
+
+      function applySearch() {
+        const keyword = (searchInput.value || "").trim().toLowerCase();
+        let shown = 0;
+
+        cards.forEach((card) => {
+          const haystack = card.dataset.search || "";
+          const match = keyword === "" || haystack.includes(keyword);
+
+          if (match) {
+            card.classList.remove("hidden");
+            shown += 1;
+          } else {
+            card.classList.add("hidden");
+          }
+        });
+
+        if (keyword) {
+          filterText.textContent = `Pencarian: "${keyword}" (${shown} dari ${total})`;
+          resetBtn.classList.remove("hidden");
+        } else {
+          filterText.textContent = "Menampilkan semua feedback";
+          resetBtn.classList.add("hidden");
+        }
+
+        if (emptyInitial) {
+          emptyInitial.classList.add("hidden");
+        }
+
+        if (total > 0 && shown === 0) {
+          emptySearch.classList.remove("hidden");
+        } else {
+          emptySearch.classList.add("hidden");
+        }
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener("input", applySearch);
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          applySearch();
+          searchInput.focus();
+        });
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const focusId = params.get("focus");
+
+      if (focusId) {
+        const target = document.getElementById(`feedback-${focusId}`);
+
+        if (target) {
+          setTimeout(() => {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+
+            target.classList.add("focus-target");
+
+            const textarea = target.querySelector('textarea[name="balasan_admin"]');
+            if (textarea) {
+              setTimeout(() => {
+                textarea.focus();
+                const len = textarea.value.length;
+                textarea.setSelectionRange(len, len);
+              }, 450);
+            }
+          }, 200);
+        }
+      }
+
+      const laporanBtn = document.getElementById("laporanBtn");
+      const laporanMenu = document.getElementById("laporanMenu");
+      const laporanOverlay = document.getElementById("laporanOverlay");
+
+      function openLaporanMenu() {
+        laporanMenu.classList.remove("hidden");
+        laporanOverlay.classList.remove("hidden");
+      }
+
+      function closeLaporanMenu() {
+        laporanMenu.classList.add("hidden");
+        laporanOverlay.classList.add("hidden");
+      }
+
+      if (laporanBtn && laporanMenu && laporanOverlay) {
+        laporanBtn.addEventListener("click", function () {
+          const isHidden = laporanMenu.classList.contains("hidden");
+          if (isHidden) {
+            openLaporanMenu();
+          } else {
+            closeLaporanMenu();
+          }
+        });
+
+        laporanOverlay.addEventListener("click", closeLaporanMenu);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Create Account</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #dcdcdc;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mobile-screen {
+      position: relative;
+      width: 100%;
+      max-width: 390px;
+      height: 100dvh;
+      overflow: hidden;
+      background: #f4f4f4;
+    }
+
+    .top-decor {
+      position: relative;
+      height: 23%;
+      min-height: 150px;
+      background: #1d2433;
+      overflow: hidden;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(61, 93, 173, 0.33);
+      box-shadow: inset -13px -8px 0 rgba(10, 15, 24, 0.58);
+    }
+
+    .b1  { width: 42px; height: 42px; top: -6px; left: -8px; }
+    .b2  { width: 30px; height: 30px; top: 8px; left: 40px; }
+    .b3  { width: 46px; height: 46px; top: -10px; right: 16px; }
+    .b4  { width: 34px; height: 34px; top: 40px; left: 8px; }
+    .b5  { width: 28px; height: 28px; top: 56px; left: 70px; }
+    .b6  { width: 42px; height: 42px; top: 36px; right: 44px; }
+    .b7  { width: 46px; height: 46px; top: 78px; left: 44px; }
+    .b8  { width: 34px; height: 34px; top: 82px; left: 114px; }
+    .b9  { width: 30px; height: 30px; top: 78px; right: 14px; }
+    .b10 { width: 44px; height: 44px; top: 108px; left: 170px; }
+    .b11 { width: 34px; height: 34px; top: 108px; right: 72px; }
+
+    .form-card {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 79%;
+      background: #f4f4f4;
+      border-top-left-radius: 90px;
+      border-top-right-radius: 90px;
+      padding: 22px 26px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 19px;
+      line-height: 1.05;
+      font-weight: 800;
+      color: #2b2b2b;
+      margin-top: 2px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 8px;
+      color: #9d9d9d;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      font-weight: 400;
+    }
+
+    .subtitle a {
+      color: #1d2433;
+      text-decoration: none;
+    }
+
+    .flash-top {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .flash {
+      padding: 11px 13px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .flash.hide {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .flash-danger {
+      background: #ffe4e6;
+      color: #b42318;
+      border: 1px solid #fecdd3;
+    }
+
+    .flash-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .flash-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 8px;
+      color: #b0b0b0;
+      letter-spacing: 0.9px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .input,
+    .select {
+      width: 100%;
+      height: 30px;
+      border: none;
+      outline: none;
+      background: #d5d5d5;
+      border-radius: 9px;
+      padding: 0 12px;
+      font-size: 9px;
+      color: #606060;
+      font-weight: 500;
+    }
+
+    .input::placeholder {
+      color: #7d7d7d;
+    }
+
+    .select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, #8f8f8f 50%),
+        linear-gradient(135deg, #8f8f8f 50%, transparent 50%);
+      background-position: calc(100% - 16px) 12px, calc(100% - 11px) 12px;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      color: #7a7a7a;
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 33px;
+      border: none;
+      border-radius: 4px;
+      background: #161b1d;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.995);
+    }
+
+    @media (min-width: 391px) {
+      .mobile-screen {
+        max-height: 760px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-screen">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-top" id="flashWrap">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="top-decor">
+      <span class="bubble b1"></span>
+      <span class="bubble b2"></span>
+      <span class="bubble b3"></span>
+      <span class="bubble b4"></span>
+      <span class="bubble b5"></span>
+      <span class="bubble b6"></span>
+      <span class="bubble b7"></span>
+      <span class="bubble b8"></span>
+      <span class="bubble b9"></span>
+      <span class="bubble b10"></span>
+      <span class="bubble b11"></span>
+    </div>
+
+    <div class="form-card">
+      <h1 class="title">Create new<br />Account</h1>
+      <p class="subtitle">Already Registered? <b><a href="{{ url_for('login') }}">Log In</a></b> here.</p>
+
+      <form method="POST" action="{{ url_for('register') }}">
+        <div class="form-group">
+          <label class="form-label">NAME</label>
+          <input
+            type="text"
+            class="input"
+            name="name"
+            placeholder="Masukkan nama"
+            value="{{ request.form.get('name', '') }}"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">NO HP</label>
+          <input
+            type="text"
+            class="input"
+            name="phone"
+            placeholder="Masukkan no hp"
+            value="{{ request.form.get('phone', '') }}"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">PASSWORD</label>
+          <input
+            type="password"
+            class="input"
+            name="password"
+            placeholder="Masukkan password"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">JENIS KELAMIN</label>
+          <select class="select" name="gender" required>
+            <option value="" disabled {% if not request.form.get('gender') %}selected{% endif %}>Select</option>
+            <option value="Laki-laki" {% if request.form.get('gender') == 'Laki-laki' %}selected{% endif %}>Laki-laki</option>
+            <option value="Perempuan" {% if request.form.get('gender') == 'Perempuan' %}selected{% endif %}>Perempuan</option>
+          </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Daftar</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", function () {
+      const flashes = document.querySelectorAll(".flash");
+      if (flashes.length > 0) {
+        setTimeout(() => {
+          flashes.forEach((flash) => flash.classList.add("hide"));
+        }, 5000);
+
+        setTimeout(() => {
+          const wrap = document.getElementById("flashWrap");
+          if (wrap) wrap.remove();
+        }, 5400);
+      }
+    });
+  </script>
+</body>
+</html>
